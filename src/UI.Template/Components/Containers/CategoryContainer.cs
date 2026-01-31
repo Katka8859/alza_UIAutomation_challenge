@@ -7,7 +7,7 @@ namespace UI.Template.Components.Containers;
 public class CategoryContainer(By locator) : BaseComponent(locator)
 {
     private readonly Simple _categoryList = new(By.XPath("//ul[@class='category-list']"));
-    private readonly Simple CurrentCategory = new(By.XPath("//li[@class='active']"));
+    private readonly Simple CurrentCategory = new(By.XPath("//li[@ko-id='category-item-all']"));
 
     public void Back() => WebDriver.WaitForUrlChanged(WebDriver.Navigate().Back);
 
@@ -26,6 +26,8 @@ public class CategoryContainer(By locator) : BaseComponent(locator)
     public void SelectCategory(string categoryName)
     {
         Simple Category = new(By.XPath($"//li[contains (text(),'{categoryName}')]"));
+        Category.WaitForDisplayed();
+        Category.WaitForEnabled(); 
         Category.Click();
         WaitForReady();
     }
