@@ -14,7 +14,7 @@ public class ProductInfo(By locator) : BaseProductInfo(locator)
     public Button IncreaseAmountButton => new(By.XPath($"{Locator.ToSelector()}//button[contains(@ko-id,'increment-button')]"));
     public Button DecreaseAmountButton => new(By.XPath($"{Locator.ToSelector()}//button[contains(@ko-id,'decrement-button')]"));
     public Simple Quantity => new(By.XPath($"{Locator.ToSelector()}//span[contains(@ko-id,'quantity-display')]"));
-    public Button AddToCartButton => new(By.XPath($"{Locator.ToSelector()}//button[@class='add-to-cart']"));
+    public Button AddToCartButton => new(By.XPath($"{Locator.ToSelector()}//button[@ko-id='add-to-cart-1']"));
     private readonly Button _backToShopButton = new(By.XPath("//a[@class='back-to-shop']"));
 
     /// <summary>
