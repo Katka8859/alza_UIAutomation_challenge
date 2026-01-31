@@ -9,9 +9,14 @@ public static class WebConfiguration
     {
         var section = Globals.Configuration.GetSection(nameof(WebConfiguration));
         BaseUrl = section[nameof(BaseUrl)] ?? string.Empty;
-        UserName = section[nameof(UserName)] ?? string.Empty;
-        UserPassword = section[nameof(UserPassword)] ?? string.Empty;
-
+    UserName = Environment.GetEnvironmentVariable("ESHOP_USERNAME") 
+               ?? section[nameof(UserName)] 
+               ?? string.Empty;
+    
+    UserPassword = Environment.GetEnvironmentVariable("ESHOP_PASSWORD") 
+                   ?? section[nameof(UserPassword)] 
+                   ?? string.Empty;
+                   
         if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserPassword))
         {
             throw new ArgumentException("UserName or UserPassword is not set in the configuration.");
