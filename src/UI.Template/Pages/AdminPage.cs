@@ -36,6 +36,8 @@ public class AdminPage() : BasePage("/admin")
         return editProductContainer;
     }
 
+    public static EditProductContainer EditProductForm => new(By.XPath("//div[@ko-id='modal-content']"));
+
     /// <summary>
     /// Navigates to the e-shop home page.
     /// </summary>
@@ -45,4 +47,11 @@ public class AdminPage() : BasePage("/admin")
         WebDriver.WaitForUrlChanged(() => _backToEshopButton.Click());
         return new HomePage();
     }
+
+public EditProductContainer OpenAddProductForm()
+{
+    _addProductButton.Click();
+    EditProductForm.WaitForDisplayed();
+    return EditProductForm;
+}
 }
