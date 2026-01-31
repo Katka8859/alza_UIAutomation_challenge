@@ -13,5 +13,6 @@ public class ExampleTest : BaseTest
         bool addedToBasket = homePage.AddToBasketFirstProductFromCategory("Electronics");
 
         Assert.That(addedToBasket, Is.True, "Product was not added to the basket.");
+
     }
 }
