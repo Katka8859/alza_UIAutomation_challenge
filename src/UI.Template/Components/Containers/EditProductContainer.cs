@@ -90,4 +90,24 @@ public class EditProductContainer(By locator) : BaseComponent(locator)
         WaitForNotDisplayed();
     }
 
+    /// <summary>
+    /// Fills all product form fields and saves the product.
+    /// </summary>
+    /// <param name="name">Product name</param>
+    /// <param name="category">Product category</param>
+    /// <param name="price">Product price</param>
+    /// <param name="stock">Product stock quantity</param>
+    /// <param name="image">Product image name</param>
+    /// <param name="description">Product description</param>
+    public void FillAndSaveProduct(string name, string category, int price, int stock, string image, string description)
+    {
+        SetName(name);
+        SelectCategory(category);
+        SetPrice(price);
+        SetStock(stock);
+        SelectImage(image);
+        SetDescription(description);
+        SaveChanges();
+    }
+
 }

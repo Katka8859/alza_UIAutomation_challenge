@@ -7,34 +7,35 @@ namespace UI.Template.Tests;
 public class AdminProductTest : BaseTest
 {
     [Test]
-    [Order(1)]
-    public void AddAndVerifyNewProductTest()
+    public void CreateProductInAdmin()
     {
         //** STEP 1: Open Admin section from home page***//
         HomePage homePage = new HomePage();
         homePage.Open();
         AdminPage adminPage = homePage.Header.OpenAdminPage();
 
-        //** STEP 2: Open Add new product modal ***//
+        //** STEP 2: Check if the product already exists and reset app if necessary **//
+        if (adminPage.ProductExists("Camera M25"))
+        {
+            Logger.LogInformation("Product 'Camera M25' already exists, resetting application");
+            adminPage.ResetApplication();
+        }
+
+        //** STEP 3: Open Add new product modal ***//
         EditProductContainer editProduct = adminPage.OpenAddProductForm();
 
-        //** STEP 3: Set product informations and click save ***//
-        editProduct.SetName("Camera M25");
-        editProduct.SelectCategory("Cameras");
-        editProduct.SetPrice(50);
-        editProduct.SetStock(5);
-        editProduct.SelectImage("Camera 2");
-        editProduct.SetDescription("High quality RGB gaming camera with backlighting");
-        editProduct.SaveChanges();
+        //** STEP 4: Set product informations and click save ***//
+        editProduct.FillAndSaveProduct("Camera M25", "Cameras", 50, 5, "Camera 2", "High quality RGB gaming camera with backlighting");
 
-        //** STEP 4: Go back to user section - home page ***//
+
+        //** STEP 5: Go back to user section - home page ***//
         homePage = new HomePage();
         homePage.Open();
 
-        //** STEP 5: In user section go to category Caneras and open product detail ***//
+        //** STEP 6: In user section go to category Caneras and open product detail ***//
         ProductDetailPage productDetail = homePage.OpenProductByNameFromCategory("Cameras", "Camera M25");
 
-        //** STEP 6: Assert of values **//
+        //** STEP 7: Assert of values **//
         Assert.Multiple(() =>
         {
             string actualName = productDetail.ProductInfoForm.GetName();

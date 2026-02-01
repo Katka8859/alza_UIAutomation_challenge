@@ -104,6 +104,7 @@ public abstract class BaseTest : IBase
     [OneTimeTearDown]
     public static void BaseOneTimeTearDown()
     {
+        CloseDriver();
         LogFactory.CloseLogger();
     }
 
@@ -116,9 +117,11 @@ public abstract class BaseTest : IBase
         LogFactory.InitializeTestMethodLogger();
         Logger.LogInformation($"EXECUTE TEST \"{TestInfo.FullName}\"");
         LogTestProperties(TestInfo.Properties);
+        
+        InitializeDriver(); // ← PŘESUNUTO PŘED ExecuteBeforeTestStart
         ExecuteBeforeTestStart();
+        
         Logger.LogInformation("TEST START");
-        InitializeDriver();
     }
 
     /// <summary>
@@ -133,7 +136,7 @@ public abstract class BaseTest : IBase
         LogErrorData();
 
         ExecuteAfterTestEnd();
-        CloseDriver();
+        //CloseDriver(); ← Zakomentováno - zavře se v OneTimeTearDown
 
         if (TestInfo.Outcome == TestStatus.Failed)
         {
@@ -154,6 +157,13 @@ public abstract class BaseTest : IBase
     /// </remarks>
     protected virtual void ExecuteBeforeTestStart()
     {
+        string username = WebConfiguration.UserName;
+        string password = WebConfiguration.UserPassword;
+        string baseUrl = WebConfiguration.BaseUrl;
+        
+        // Navigate with credentials in URL
+        string urlWithAuth = baseUrl.Replace("https://", $"https://{username}:{password}@");
+        WebDriver.Navigate().GoToUrl(urlWithAuth);
     }
 
     /// <summary>

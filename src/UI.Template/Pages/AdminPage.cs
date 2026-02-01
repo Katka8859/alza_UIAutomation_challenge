@@ -11,6 +11,9 @@ public class AdminPage() : BasePage("/admin")
     private readonly Button _backToEshopButton = new(By.XPath("//button[@class='back-button']"));
     private readonly Button _addProductButton = new(By.XPath("//button[@class='add-button']"));
     private readonly AdminProductGridContainer _productsGrid = new AdminProductGridContainer(By.XPath("//*[@class='product-grid']"));
+    private readonly Button _resetApplicationButton = new(By.XPath("//button[@ko-id='reset-button']"));
+    public static EditProductContainer EditProductForm => new(By.XPath("//div[@ko-id='modal-content']"));
+
 
     /// <summary>
     /// Tries to get a admin product card by product name.
@@ -36,8 +39,6 @@ public class AdminPage() : BasePage("/admin")
         return editProductContainer;
     }
 
-    public static EditProductContainer EditProductForm => new(By.XPath("//div[@ko-id='modal-content']"));
-
     /// <summary>
     /// Navigates to the e-shop home page.
     /// </summary>
@@ -48,10 +49,37 @@ public class AdminPage() : BasePage("/admin")
         return new HomePage();
     }
 
-public EditProductContainer OpenAddProductForm()
-{
+   /// <summary>
+   /// Opens the form for adding a new product by clicking the Add Product button.
+   /// Waits for the edit product modal to be displayed before returning.
+   /// </summary>
+   /// <returns>EditProductContainer instance ready for interaction</returns>
+    public EditProductContainer OpenAddProductForm()
+    {
     _addProductButton.Click();
     EditProductForm.WaitForDisplayed();
     return EditProductForm;
-}
+    }
+
+    /// <summary>
+    /// Resets the application by clicking the Reset Application button.
+    /// </summary>
+    public void ResetApplication()
+    {
+    _resetApplicationButton.WaitForDisplayed();
+    _resetApplicationButton.Click();
+    WaitForReady();
+    Logger.LogInformation("Application reset completed");
+    }
+
+    /// <summary>
+    /// Checks if a product exists in the admin product grid by name.
+    /// </summary>
+    /// <param name="productName">Name of the product to check</param>
+    /// <returns>True if product exists, false otherwise</returns>
+    public bool ProductExists(string productName)
+    {
+    var productCards = _productsGrid.GetProductCards();
+    return productCards.ContainsKey(productName);
+    }
 }
