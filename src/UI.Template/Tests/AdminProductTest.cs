@@ -10,9 +10,10 @@ public class AdminProductTest : BaseTest
     [Order(1)]
     public void AddAndVerifyNewProductTest()
     {
-        //** STEP 1: Open Admin section ***//
-        AdminPage adminPage = new AdminPage();
-        adminPage.Open();
+        //** STEP 1: Open Admin section from home page***//
+        HomePage homePage = new HomePage();
+        homePage.Open();
+        AdminPage adminPage = homePage.Header.OpenAdminPage();
 
         //** STEP 2: Open Add new product modal ***//
         EditProductContainer editProduct = adminPage.OpenAddProductForm();
@@ -26,8 +27,8 @@ public class AdminProductTest : BaseTest
         editProduct.SetDescription("High quality RGB gaming camera with backlighting");
         editProduct.SaveChanges();
 
-        //** STEP 4: Go back to user section ***//
-        HomePage homePage = new HomePage();
+        //** STEP 4: Go back to user section - home page ***//
+        homePage = new HomePage();
         homePage.Open();
 
         //** STEP 5: In user section go to category Caneras and open product detail ***//
