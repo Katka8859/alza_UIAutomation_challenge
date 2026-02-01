@@ -7,7 +7,6 @@ namespace UI.Template.Tests;
 public class AdminProductTest : BaseTest
 {
     [Test]
-    [Order(1)]
     public void CreateProductInAdmin()
     {
         //** STEP 1: Open Admin section from home page***//

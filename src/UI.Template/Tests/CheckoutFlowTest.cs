@@ -7,7 +7,6 @@ namespace UI.Template.Tests;
 public class CheckoutFlowTest : BaseTest
 {
     [Test]
-    [Order(2)]
     public void CheckoutAndPurchaseTest()
     {
         //** STEP 1: Ensure test product exists **//
