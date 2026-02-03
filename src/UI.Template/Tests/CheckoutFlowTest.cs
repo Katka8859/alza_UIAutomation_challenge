@@ -1,3 +1,4 @@
+using UI.Template.Data;
 using UI.Template.Pages;
 using UI.Template.Components.Containers;
 
@@ -14,18 +15,26 @@ public class CheckoutFlowTest : BaseTest
         homePage.Open();
         AdminPage adminPage = homePage.Header.OpenAdminPage();
 
-        if (!adminPage.ProductExists("Camera M25"))
+        if (!adminPage.ProductExists(TestData.AdminTestProduct.ProductName))
         {
-            Logger.LogInformation("Product 'Camera M25' does not exist, creating it for checkout test");
+            Logger.LogInformation($"Product '{TestData.AdminTestProduct.ProductName}' does not exist, creating it for checkout test");
             EditProductContainer editProduct = adminPage.OpenAddProductForm();
-            editProduct.FillAndSaveProduct("Camera M25", "Cameras", 50, 5, "Camera 2", "High quality RGB gaming camera with backlighting");
+            editProduct.FillAndSaveProduct(
+                TestData.AdminTestProduct.ProductName,
+                TestData.AdminTestProduct.ProductCategory,
+                TestData.AdminTestProduct.ProductPrice,
+                TestData.AdminTestProduct.ProductStock,
+                TestData.AdminTestProduct.ProductImage,
+                TestData.AdminTestProduct.ProductDescription);
         }
 
-        //** STEP 2: Add created product from AdminProductTest to basket**//
+        //** STEP 2: Add created product to basket**//
         homePage = new HomePage();
         homePage.Open();
 
-        ProductDetailPage productDetail = homePage.OpenProductByNameFromCategory("Cameras", "Camera M25");
+        ProductDetailPage productDetail = homePage.OpenProductByNameFromCategory(
+            TestData.AdminTestProduct.ProductCategory,
+            TestData.AdminTestProduct.ProductName);
 
         productDetail.ProductInfoForm.AddToCart();
 
@@ -36,16 +45,23 @@ public class CheckoutFlowTest : BaseTest
         {
             bool productFound = productDetail.Header.GetNthProduct(1, out string productName, out string productDetailText);
             Assert.That(productFound, Is.True, "Product not found in cart");
-            Assert.That(productName, Is.EqualTo("Camera M25"), "Product name in cart does not match");
-            Assert.That(productDetailText.Contains("50"), Is.True, "Product price in cart does not match");
+            Assert.That(productName, Is.EqualTo(TestData.AdminTestProduct.ProductName), "Product name in cart does not match");
+            Assert.That(productDetailText.Contains(TestData.AdminTestProduct.ProductPrice.ToString()), Is.True, "Product price in cart does not match");
         });
 
         //** STEP 4: Click to checkout**//
         CheckoutPage checkoutPage = productDetail.Header.ProceedToCheckout();
         
         //** STEP 5: Fill checkout form with valid data and select payment method **//
-        checkoutPage.FillCheckoutForm("Test", "User", "Test Street 123", "Prague", "11000", "test@example.com", "123456789");
-        checkoutPage.SelectPayment("PayPal");
+        checkoutPage.FillCheckoutForm(
+            TestData.CheckoutTestData.FirstName,
+            TestData.CheckoutTestData.LastName,
+            TestData.CheckoutTestData.Address,
+            TestData.CheckoutTestData.City,
+            TestData.CheckoutTestData.PostalCode,
+            TestData.CheckoutTestData.Email,
+            TestData.CheckoutTestData.Phone);
+        checkoutPage.SelectPayment(TestData.CheckoutTestData.PaymentMethod);
 
         //** STEP 6: Click to Pay button **//
         OrderConfirmationPage confirmationPage = checkoutPage.CompletePurchase();
@@ -57,9 +73,9 @@ public class CheckoutFlowTest : BaseTest
             Assert.That(totalPrice.Contains("$ 50.00"), Is.True, "Total price does not match");
             
             string paymentMethod = confirmationPage.GetPaymentMethod();
-            Assert.That(paymentMethod.Contains("Payment Method: PayPal"), Is.True, "Payment method does not match");
+            Assert.That(paymentMethod.Contains($"Payment Method: {TestData.CheckoutTestData.PaymentMethod}"), Is.True, "Payment method does not match");
         });
 
-        Logger.LogInformation("Order completed successfully with PayPal payment");
+        Logger.LogInformation($"Order completed successfully with {TestData.CheckoutTestData.PaymentMethod} payment");
     }
 }
