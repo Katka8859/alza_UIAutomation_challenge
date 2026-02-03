@@ -7,5 +7,7 @@ UI.Template is a modular, extensible UI automation template built with .NET 8.0,
 - [Prerequisites](docs/Prerequisites.md)
 - [Guidelines](docs/Guidelines.md)
 - [Running Tests](docs/Running-Tests.md)
-- [Test Scenarios](docs/Test-Scenarios.md)
+- [Test Scenarios](docs/Test-Scenarios.md) - informations and details about new added tests scenarious
+
+
 
