@@ -108,3 +108,6 @@ TC4 (`CheckoutAndPurchaseTest`) currently fails at the payment step with the fol
 
 The product is successfully created in the admin panel and added to the cart, but the application rejects the purchase at checkout. This appears to be a bug on the application side, as all product data is correctly filled in and the product is available in the e-shop. The issue is being investigated.
 
+
+> **Note:** The pre-existing tests (`CartTest`, `ProductParametersTest`) are currently failing when run on the remote server via GitHub Actions, but pass when run locally. Fixing these tests to work in the remote environment is a TODO and is not in scope of this challenge.
+
